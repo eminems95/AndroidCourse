@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidCourse</string>
+    <string name="close_activity">Close activity</string>
 </resources>
