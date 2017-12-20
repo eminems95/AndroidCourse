@@ -58,7 +58,7 @@ public class A2 extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        collapsingToolbarLayoutCzęść 3 - Widoki, wyświetlanie obrazków, permissions, Material Design.setTitle(contact.getName());
+        collapsingToolbarLayout.setTitle(contact.getName());
     }
 
     public void finishActivity() {
