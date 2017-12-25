@@ -9,27 +9,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.anotherdeveloper.zadanie_1.A2;
-import com.anotherdeveloper.zadanie_1.Contact;
 import com.anotherdeveloper.zadanie_1.R;
+import com.anotherdeveloper.zadanie_1.activities.A2;
+import com.anotherdeveloper.zadanie_1.models.Contact;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by Marcin on 2017-12-20.
- :)
+ * :)
  */
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Contact> items;
+    private List<Contact> items;
     private int itemLayout;
     private Context context;
 
-    public ContactsRecyclerViewAdapter(ArrayList<Contact> items, int itemLayout, Context context) {
+    public ContactsRecyclerViewAdapter(List<Contact> items, int itemLayout, Context context) {
         this.items = items;
         this.itemLayout = itemLayout;
         this.context = context;
@@ -44,12 +44,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Contact item = items.get(position);
-        holder.name.setText(item.getName());
-        holder.number.setText(item.getPhoneNumber());
-        holder.image.setImageBitmap(null);
+        String nameAndSurname = item.getFirstName() + " " + item.getLastName();
+        holder.name.setText(nameAndSurname);
+        holder.number.setText(item.getPhone());
+        holder.email.setText(item.getEmail());
 
-        Picasso.with(holder.image.getContext()).cancelRequest(holder.image);
-        Picasso.with(holder.image.getContext()).load(item.getProfilePhoto()).into(holder.image);
+
+        Picasso.with(holder.image.getContext()).load(item.getAvatar()).error(R.drawable.lenny).into(holder.image);
 
         holder.itemView.setTag(item);
 
@@ -60,7 +61,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("name", holder.name.getText());
                 intent.putExtra("number", holder.number.getText());
-                intent.putExtra("image", item.getProfilePhoto());
+                intent.putExtra("email", holder.email.getText());
+                intent.putExtra("image", item.getAvatar());
                 context.startActivity(intent);
             }
         });
@@ -86,14 +88,18 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.row_profile_photo_image_view) ImageView image;
-        @BindView(R.id.row_name_text_view) TextView name;
-        @BindView(R.id.row_number_text_view) TextView number;
+        @BindView(R.id.row_profile_photo_image_view)
+        ImageView image;
+        @BindView(R.id.row_name_text_view)
+        TextView name;
+        @BindView(R.id.row_number_text_view)
+        TextView number;
+        @BindView(R.id.row_email_text_view)
+        TextView email;
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
         }
     }
 }
