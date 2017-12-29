@@ -1,4 +1,4 @@
-package com.anotherdeveloper.zadanie_1.activities;
+package com.anotherdeveloper.androidcourse.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anotherdeveloper.zadanie_1.R;
+import com.anotherdeveloper.androidcourse.R;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 public class A2 extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.details_toolbar)
     Toolbar toolbar;
     @BindView(R.id.toolbarImage)
     ImageView toolbarImageView;

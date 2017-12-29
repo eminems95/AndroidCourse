@@ -1,4 +1,4 @@
-package com.anotherdeveloper.zadanie_1;
+package com.anotherdeveloper.androidcourse;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

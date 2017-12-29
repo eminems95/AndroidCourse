@@ -1,6 +1,6 @@
-package com.anotherdeveloper.zadanie_1.api;
+package com.anotherdeveloper.androidcourse.api;
 
-import com.anotherdeveloper.zadanie_1.models.Contact;
+import com.anotherdeveloper.androidcourse.models.Contact;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
