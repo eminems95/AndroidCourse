@@ -3,11 +3,8 @@ package com.anotherdeveloper.androidcourse.activities;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -17,7 +14,7 @@ import com.anotherdeveloper.androidcourse.adapters.ContactsRecyclerViewAdapter;
 import com.anotherdeveloper.androidcourse.api.Client;
 import com.anotherdeveloper.androidcourse.api.Service;
 import com.anotherdeveloper.androidcourse.models.Contact;
-import com.anotherdeveloper.androidcourse.utilities.ConnectivityManagement;
+import com.anotherdeveloper.androidcourse.utilities.ConnectivityManagerClass;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,23 +28,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class A1 extends AppCompatActivity implements
-        ConnectivityManagement.IConnectionCheck,
+public class MainActivity extends AppCompatActivity implements
+        ConnectivityManagerClass.IConnectionCheck,
         Realm.Transaction,
         Realm.Transaction.OnSuccess,
         Realm.Transaction.OnError,
         Callback<Contact[]> {
 
-    ArrayList<Contact> contacts;
+    ArrayList<Contact> contacts = new ArrayList<>();
+    ContactsRecyclerViewAdapter contactsRecyclerViewAdapter = new ContactsRecyclerViewAdapter(contacts);
     Realm realm;
-    ConnectivityManagement connectivityManagement;
+    ConnectivityManagerClass connectivityManagement;
     boolean isConnected = false;
 
-    @BindView(R.id.contacts_recycler_view)
+    @BindView(R.id.recyclerview_main_contacts)
     RecyclerView recyclerView;
-    @BindView(R.id.progress_bar)
+    @BindView(R.id.progressbar_main)
     ProgressBar progressBar;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar_main)
     Toolbar toolbar;
 
     @Override
@@ -56,7 +54,6 @@ public class A1 extends AppCompatActivity implements
         setContentView(R.layout.activity_a1);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
-        contacts = new ArrayList<>();
         initRecyclerView();
         initConnectivityManagement();
     }
@@ -70,13 +67,13 @@ public class A1 extends AppCompatActivity implements
     @Override
     public void onOnline(boolean isConnected) {
 
-            loadJSON();
+        loadJSON();
     }
 
     @Override
     public void onOffline(boolean isConnected) {
 
-            loadFromRealmDatabase();
+        loadFromRealmDatabase();
     }
 
     @Override
@@ -104,7 +101,7 @@ public class A1 extends AppCompatActivity implements
         contacts.clear();
         List<Contact> contactsFromAPI = Arrays.asList(response.body());
         contacts = new ArrayList<>(contactsFromAPI);
-        refreshRecyclerView(R.layout.recycler_view_row);
+        refreshRecyclerView();
         saveIntoDatabase();
         progressBar.setVisibility(View.GONE);
     }
@@ -117,17 +114,15 @@ public class A1 extends AppCompatActivity implements
 
     private void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new ContactsRecyclerViewAdapter(contacts, R.layout.recycler_view_row, this));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(contactsRecyclerViewAdapter);
     }
 
     private void initConnectivityManagement() {
-        connectivityManagement = new ConnectivityManagement(this);
+        connectivityManagement = new ConnectivityManagerClass(this);
         isConnected = connectivityManagement.getConnectionStatus(toolbar);
-        if (isConnected){
+        if (isConnected) {
             onOnline(isConnected);
-        }else{
+        } else {
             onOffline(isConnected);
         }
     }
@@ -137,7 +132,7 @@ public class A1 extends AppCompatActivity implements
         realm = Realm.getDefaultInstance();
         RealmResults<Contact> contactRealmResults = realm.where(Contact.class).findAll();
         contacts = new ArrayList<>(contactRealmResults);
-        refreshRecyclerView(R.layout.recycler_view_row);
+        refreshRecyclerView();
         progressBar.setVisibility(View.GONE);
     }
 
@@ -154,10 +149,8 @@ public class A1 extends AppCompatActivity implements
         }
     }
 
-    private void refreshRecyclerView(int itemLayout) {
-        recyclerView.setAdapter(new ContactsRecyclerViewAdapter(contacts, itemLayout, getApplicationContext()));
-        recyclerView.invalidate();
-        recyclerView.smoothScrollToPosition(0);
+    private void refreshRecyclerView() {
+        contactsRecyclerViewAdapter.updateContactListItems(contacts);
     }
 
     private void saveIntoDatabase() {

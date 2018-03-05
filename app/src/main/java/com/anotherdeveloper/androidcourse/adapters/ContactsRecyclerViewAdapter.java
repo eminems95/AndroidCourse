@@ -2,10 +2,8 @@ package com.anotherdeveloper.androidcourse.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,15 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anotherdeveloper.androidcourse.R;
-import com.anotherdeveloper.androidcourse.activities.A2;
+import com.anotherdeveloper.androidcourse.activities.DetailsActivity;
 import com.anotherdeveloper.androidcourse.models.Contact;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,35 +32,33 @@ import butterknife.ButterKnife;
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Contact> items;
-    private int itemLayout;
-    private Context context;
 
-    public ContactsRecyclerViewAdapter(ArrayList<Contact> items, int itemLayout, Context context) {
+    public ContactsRecyclerViewAdapter(ArrayList<Contact> items) {
         this.items = items;
-        this.itemLayout = itemLayout;
-        this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contacts, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Contact item = items.get(position);
+        final Context context = holder.itemView.getContext();
         String nameAndSurname = item.getFirstName() + " " + item.getLastName();
         holder.name.setText(nameAndSurname);
         holder.number.setText(item.getPhone());
         holder.email.setText(item.getEmail());
 
-        Picasso.with(context)
+
+
+        Picasso.with(holder.email.getContext())
                 .load(item.getAvatar())
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.image, getImageOnline(holder, item));
+                .into(holder.image, getImageOnline(holder, item, context));
 
-        holder.itemView.setTag(item);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,8 +76,17 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         });
     }
 
+    public void updateContactListItems(List<Contact> employees) {
+        final ContactsDiffCallback diffCallback = new ContactsDiffCallback(this.items, employees);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        this.items.clear();
+        this.items.addAll(employees);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
     @NonNull
-    private Callback getImageOnline(final ViewHolder holder, final Contact item) {
+    private Callback getImageOnline(final ViewHolder holder, final Contact item, final Context context) {
         return new Callback() {
             @Override
             public void onSuccess() {
@@ -111,7 +115,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
     @NonNull
     private Intent getIntent(ViewHolder holder, Contact item) {
-        Intent intent = new Intent(context, A2.class);
+        Intent intent = new Intent(holder.itemView.getContext(), DetailsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("name", holder.name.getText());
         intent.putExtra("number", holder.number.getText());
@@ -146,13 +150,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.row_profile_photo_image_view)
+        @BindView(R.id.imageview_contacts_profilephoto)
         ImageView image;
-        @BindView(R.id.row_name_text_view)
+        @BindView(R.id.textview_contacts_username)
         TextView name;
-        @BindView(R.id.row_number_text_view)
+        @BindView(R.id.textview_contacts_phonenumber)
         TextView number;
-        @BindView(R.id.row_email_text_view)
+        @BindView(R.id.textview_contacts_email)
         TextView email;
 
         ViewHolder(View itemView) {

@@ -68,8 +68,7 @@ public class Contact extends RealmObject {
         return isSeen;
     }
 
-    public boolean setSeen(boolean seen) {
+    public void setSeen(boolean seen) {
         isSeen = seen;
-        return isSeen;
     }
 }

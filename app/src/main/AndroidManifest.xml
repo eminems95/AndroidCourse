@@ -15,7 +15,7 @@
 
 
         <activity
-            android:name=".activities.A1"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.A2"
+            android:name=".activities.DetailsActivity"
             android:theme="@style/AppThemeNoActionBar" />
     </application>
 

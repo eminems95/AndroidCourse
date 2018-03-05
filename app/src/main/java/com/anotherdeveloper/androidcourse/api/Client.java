@@ -27,7 +27,8 @@ public class Client {
 
         if (retrofit == null)
             retrofit = new Retrofit.Builder()
-                    .baseUrl(HOME_URL).client(builder.build())
+                    .baseUrl(HOME_URL)
+                    .client(builder.build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

@@ -16,10 +16,10 @@ import com.anotherdeveloper.androidcourse.R;
  * :)
  */
 
-public class ConnectivityManagement {
+public class ConnectivityManagerClass {
     private Context context;
     private boolean isConnected=false;
-    public ConnectivityManagement(Context context) {
+    public ConnectivityManagerClass(Context context) {
         this.context = context;
     }
 
