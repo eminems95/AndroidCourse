@@ -1,33 +1,35 @@
-package com.anotherdeveloper.zadanie_1.models;
+package com.anotherdeveloper.androidcourse.models;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Marcin on 2017-12-19.
  * :)
  */
 
-public class Contact {
-    @SerializedName("id")
+public class Contact extends RealmObject {
+
+    @PrimaryKey
     @Expose
     private String id;
-    @SerializedName("firstName")
     @Expose
     private String firstName;
-    @SerializedName("lastName")
     @Expose
     private String lastName;
-    @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("phone")
     @Expose
     private String phone;
-    @SerializedName("avatar")
     @Expose
     private String avatar;
-
+    @Ignore
+    private boolean isSeen = false;
+    public Contact() {
+    }
 
     public Contact(String id, String firstName, String lastName, String email, String phone, String avatar) {
         this.id = id;
@@ -60,5 +62,13 @@ public class Contact {
 
     public String getAvatar() {
         return avatar;
+    }
+
+    public boolean isSeen() {
+        return isSeen;
+    }
+
+    public void setSeen(boolean seen) {
+        isSeen = seen;
     }
 }

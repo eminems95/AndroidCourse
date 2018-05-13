@@ -1,4 +1,4 @@
-package com.anotherdeveloper.zadanie_1.activities;
+package com.anotherdeveloper.androidcourse.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anotherdeveloper.zadanie_1.R;
+import com.anotherdeveloper.androidcourse.R;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -21,17 +21,17 @@ import butterknife.ButterKnife;
  * :)
  */
 
-public class A2 extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar_details)
     Toolbar toolbar;
-    @BindView(R.id.toolbarImage)
-    ImageView toolbarImageView;
-    @BindView(R.id.phone_number_text_view)
+    @BindView(R.id.imageview_details_collapsingtoolbarbackground)
+    ImageView collapsingToolbarImageView;
+    @BindView(R.id.textview_details_phonenumber)
     TextView phoneNumberTextView;
-    @BindView(R.id.email_text_view)
+    @BindView(R.id.textview_details_email)
     TextView emailTextView;
-    @BindView(R.id.collapsingToolbar)
+    @BindView(R.id.collapsingtoolbarlayout_details_usernamecontainer)
     CollapsingToolbarLayout collapsingToolbarLayout;
     String contactName;
     String contactNumber;
@@ -83,7 +83,7 @@ public class A2 extends AppCompatActivity {
     }
 
     public void loadImage() {
-        Picasso.with(getApplicationContext()).load(contactImageURI).into(toolbarImageView);
+        Picasso.with(getApplicationContext()).load(contactImageURI).into(collapsingToolbarImageView);
     }
 
     private void initSupportActionBar() {

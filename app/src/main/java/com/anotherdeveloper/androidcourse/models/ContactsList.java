@@ -1,4 +1,4 @@
-package com.anotherdeveloper.zadanie_1.models;
+package com.anotherdeveloper.androidcourse.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

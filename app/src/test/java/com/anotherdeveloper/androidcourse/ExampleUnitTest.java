@@ -1,4 +1,4 @@
-package com.anotherdeveloper.zadanie_1;
+package com.anotherdeveloper.androidcourse;
 
 import org.junit.Test;
 
